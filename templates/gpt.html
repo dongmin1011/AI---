@@ -51,7 +51,6 @@
         }
     </style>
 </head>
-
 <body>
     <div id="chat-container">
         <div id="chat-messages"></div>
@@ -71,15 +70,13 @@
             messageDiv.textContent = initialMessage;
             chatMessages.appendChild(messageDiv);
         }
-
-        // 페이지가 로드될 때 초기 메시지 출력
-        window.onload = pageLoad;
-        function pageLoad(){
-            const initialQuestion = "GPT가 생성한 질문: {{ user_question }}"; // 수정
-            displayInitialMessage(initialQuestion);
         
-        }
-            
+        // 페이지가 로드될 때 초기 메시지 출력
+        window.addEventListener('load', () => {
+            // 사용자의 초기 질문을 화면에 출력
+            const initialQuestion = "GPT가 생성한 질문: " + "{{ user_question }}"; // 수정
+            displayInitialMessage(initialQuestion);
+        });
 
         sendButton.addEventListener("click", () => {
             // 사용자가 입력한 메시지 가져오기
@@ -89,7 +86,7 @@
             displayMessage("user", userMessage);
 
             // 서버로 메시지를 전송하고 응답을 받는 부분은 서버 측에서 처리해야 합니다.
-
+            
             // 메시지 입력란 비우기
             messageInput.value = "";
         });
@@ -97,18 +94,14 @@
         // 메시지를 채팅창에 출력하는 함수
         function displayMessage(sender, message) {
             // 메시지를 HTML 문자열로 생성
-            const messageHTML = `${sender}: ${message}`;
+            const messageHTML = `<div class="message">${sender}: ${message}</div>`;
             
-            // chatMessages에 텍스트로 추가
-            const messageDiv = document.createElement("div");
-            messageDiv.className = "message";
-            messageDiv.textContent = messageHTML;
-            chatMessages.appendChild(messageDiv);
-        
+            // chatMessages에 HTML 문자열을 추가
+            chatMessages.innerHTML += messageHTML;
+
             // 새로운 메시지가 추가될 때 스크롤을 아래로 이동
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
-        
     </script>
 </body>
 </html>

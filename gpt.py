@@ -1,6 +1,6 @@
 import openai
 
-api_key = "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"
+api_key = "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"
 openai.api_key = api_key
 
 # 사용자에게 무엇을 물어볼지 프롬프트로 정의합니다.
