@@ -2,8 +2,10 @@ import os
 from flask import Flask, render_template, request, redirect, url_for
 from pdfminer.high_level import extract_text
 import openai
+import pyaudio
+import wave
 
-api_key = "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"
+api_key = "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"
 openai.api_key = api_key
 
 prompt = """너는 지금부터 면접관이고, 사용자를 면접보는 역할이야
@@ -63,10 +65,55 @@ def gpt():
     text = user_question.split("?")[0]
     
         
-
+    text = text.replace('\n', '')
     print("GPT가 생성한 질문:", text)
-    text.replace('\n', '')
+    
     return render_template('gpt.html', user_question=text)
+
+@app.route('/record', methods=['post'])
+def record():
+    print("녹음")
+    FORMAT = pyaudio.paInt16  # 오디오 포맷 (16-bit int)
+    CHANNELS = 1  # 모노 오디오
+    RATE = 44100  # 샘플링 속도 (Hz)
+    RECORD_SECONDS = 5  # 녹음 시간 (초)
+    OUTPUT_FILENAME = "recorded_audio.wav"  # 녹음된 오디오 파일 이름
+
+    # PyAudio 오브젝트 생성
+    audio = pyaudio.PyAudio()
+
+    # 녹음 스트림 열기
+    stream = audio.open(format=FORMAT, channels=CHANNELS,
+                        rate=RATE, input=True,
+                        frames_per_buffer=1024)
+
+    print("녹음 시작...")
+
+    frames = []
+
+    # 오디오 녹음
+    for i in range(0, int(RATE / 1024 * RECORD_SECONDS)):
+        data = stream.read(1024)
+        frames.append(data)
+
+    print("녹음 종료.")
+
+    # 스트림 정리
+    stream.stop_stream()
+    stream.close()
+
+    # PyAudio 오브젝트 종료
+    audio.terminate()
+
+    # 녹음된 오디오를 WAV 파일로 저장
+    with wave.open(OUTPUT_FILENAME, 'wb') as wf:
+        wf.setnchannels(CHANNELS)
+        wf.setsampwidth(audio.get_sample_size(FORMAT))
+        wf.setframerate(RATE)
+        wf.writeframes(b''.join(frames))
+
+    print(f"녹음된 오디오는 '{OUTPUT_FILENAME}'에 저장되었습니다.")
+    return "HI"
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -18,6 +18,7 @@
             padding: 10px;
             margin-top: 5px;
             background-color: #e6e6e6;
+            order: -1;
         }
         #chat-container {
             width: 400px;
@@ -32,6 +33,7 @@
             padding: 10px;
             display: flex;
             flex-direction: column-reverse;
+  flex-direction: column; 
         }
         #user-input {
             display: flex;
@@ -49,20 +51,25 @@
             padding: 10px 15px;
             cursor: pointer;
         }
+        
     </style>
 </head>
 <body>
     <div id="chat-container">
         <div id="chat-messages"></div>
         <div id="user-input">
-            <input type="text" placeholder="메시지를 입력하세요..." id="message-input" />
-            <button id="send-button">전송</button>
+            
+            <h5  id="record">
+                버튼을 눌러 질문에 대한 답을 하세요
+            </h5>
+        
+            <button id="record-button">녹음</button>
         </div>
     </div>
     <script>
         const chatMessages = document.getElementById("chat-messages");
         const messageInput = document.getElementById("message-input");
-        const sendButton = document.getElementById("send-button");
+        const sendButton = document.getElementById("record-button");
 
         function displayInitialMessage(initialMessage) {
             const messageDiv = document.createElement("div");
@@ -80,15 +87,28 @@
 
         sendButton.addEventListener("click", () => {
             // 사용자가 입력한 메시지 가져오기
-            const userMessage = messageInput.value;
+                // POST 요청을 생성
+                document.getElementById("record").textContent = "녹음 시작";
 
-            // 사용자 메시지를 채팅창에 표시
-            displayMessage("user", userMessage);
 
-            // 서버로 메시지를 전송하고 응답을 받는 부분은 서버 측에서 처리해야 합니다.
+    const xhr = new XMLHttpRequest();
+    const url = "/record"; // 파이썬 서버의 엔드포인트 URL로 수정해야 합니다
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
-            // 메시지 입력란 비우기
-            messageInput.value = "";
+    // 데이터를 JSON 형식으로 전송
+    const data = JSON.stringify({ message: "" });
+    xhr.send(data);
+
+    // POST 요청이 완료되면 이벤트 처리
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            // 서버로부터 응답을 처리할 수 있습니다.
+            const response = xhr.responseText;
+            console.log(response);
+            document.getElementById("record").textContent = "버튼을 눌러 질문에 대한 답을 하세요";
+        }
+    };
         });
 
         // 메시지를 채팅창에 출력하는 함수
