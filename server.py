@@ -5,7 +5,7 @@ import openai
 import pyaudio
 import wave
 
-api_key = "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"
+api_key = "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"
 openai.api_key = api_key
 
 prompt = """너는 지금부터 면접관이고, 사용자를 면접보는 역할이야

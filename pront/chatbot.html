@@ -20,6 +20,7 @@
             padding: 10px;
             margin-top: 5px;
             background-color: #e6e6e6;
+            order: -1;
         }
 
         #chat-container {
@@ -36,6 +37,7 @@
             padding: 10px;
             display: flex;
             flex-direction: column-reverse;
+            flex-direction: column;
         }
 
         #user-input {
@@ -63,15 +65,21 @@
     <div id="chat-container">
         <div id="chat-messages"></div>
         <div id="user-input">
-            <button id="$btn.onclick">녹음</button>
 
-            <audio controls>녹음된 소리를 재생할 audio 엘리먼트</audio>
+            <h5 id="record">
+                버튼을 눌러 질문에 대한 답을 하세요
+            </h5>
         </div>
+            <button type="button" onclick="" disabled>녹음</button>
+
+            
+            
+        
     </div>
     <script>
         const chatMessages = document.getElementById("chat-messages");
         const messageInput = document.getElementById("message-input");
-        const sendButton = document.getElementById("send-button");
+        const sendButton = document.getElementById("record-button");
 
         function displayInitialMessage(initialMessage) {
             const messageDiv = document.createElement("div");
@@ -86,20 +94,20 @@
             const initialQuestion = "GPT가 생성한 질문: " + "{{ user_question }}"; // 수정
             displayInitialMessage(initialQuestion);
         });
-        /*
-                sendButton.addEventListener("click", () => {
-                    // 사용자가 입력한 메시지 가져오기
-                    const userMessage = messageInput.value;
-        
-                    // 사용자 메시지를 채팅창에 표시
-                    displayMessage("user", userMessage);
-        
-                    // 서버로 메시지를 전송하고 응답을 받는 부분은 서버 측에서 처리해야 합니다.
-        
-                    // 메시지 입력란 비우기
-                    messageInput.value = "";
-                }); 
-        */
+
+        sendButton.addEventListener("click", () => {
+            // 사용자가 입력한 메시지 가져오기
+            const userMessage = messageInput.value;
+
+            // 사용자 메시지를 채팅창에 표시
+            displayMessage("user", userMessage);
+
+            // 서버로 메시지를 전송하고 응답을 받는 부분은 서버 측에서 처리해야 합니다.
+
+            // 메시지 입력란 비우기
+            messageInput.value = "";
+        });
+
         // 메시지를 채팅창에 출력하는 함수
         function displayMessage(sender, message) {
             // 메시지를 HTML 문자열로 생성
@@ -112,143 +120,6 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
     </script>
-    <!-- <button id="recordButton">녹음 시작/중지</button>
-    <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
-    <script>
-      let audioContext;
-      let recorder;
-      let isRecording = false;
-
-      document.getElementById('recordButton').addEventListener('click', () => {
-        if (!isRecording) {
-          // 녹음 시작
-          navigator.mediaDevices.getUserMedia({ audio: true })
-            .then(stream => {
-              audioContext = new AudioContext();
-              recorder = new Recorder(audioContext.createMediaStreamSource(stream));
-              recorder.record();
-              isRecording = true;
-              document.getElementById('recordButton').textContent = '녹음 중지';
-            })
-            .catch(error => console.error('녹음을 시작하는 중에 오류 발생: ', error));
-        } else {
-          // 녹음 중지
-          recorder.stop();
-          audioContext.close();
-          isRecording = false;
-          document.getElementById('recordButton').textContent = '녹음 시작';
-
-          // 녹음 중지 후 자동 저장
-          recorder.exportWAV(blob => {
-            const audioBlob = new Blob([blob], { type: 'audio/mp3' });
-            const url = URL.createObjectURL(audioBlob);
-
-            // 자동 다운로드
-            const a = document.createElement('a');
-            document.body.appendChild(a);
-            a.style.display = 'none';
-            a.href = url;
-            a.download = 'recorded.mp3';
-            a.click();
-            URL.revokeObjectURL(url);
-          });
-        }
-      });
-    </script> -->
-    <script>
-
-        // 엘리먼트 취득
-        const $audioEl = document.querySelector("audio");
-        const $btn = document.querySelector("button");
-
-        // 녹음중 상태 변수
-        let isRecording = false;
-
-        // MediaRecorder 변수 생성
-        let mediaRecorder = null;
-        let recoder;
-        // 녹음 데이터 저장 배열
-        const audioArray = [];
-
-        $btn.onclick = async function (event) {
-            if (!isRecording) {
-
-                // 마이크 mediaStream 생성: Promise를 반환하므로 async/await 사용
-                const mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-
-                // MediaRecorder 생성
-                mediaRecorder = new MediaRecorder(mediaStream);
-
-                // 이벤트핸들러: 녹음 데이터 취득 처리
-                mediaRecorder.ondataavailable = (event) => {
-                    audioArray.push(event.data); // 오디오 데이터가 취득될 때마다 배열에 담아둔다.
-                }
-
-                // 이벤트핸들러: 녹음 종료 처리 & 재생하기
-                mediaRecorder.onstop = (event) => {
-
-                    // 녹음이 종료되면, 배열에 담긴 오디오 데이터(Blob)들을 합친다: 코덱도 설정해준다.
-                    const blob = new Blob(audioArray, { "type": "audio/ogg codecs=opus" });
-                    const client_id = "n7zz4t1epm";
-                    const client_secret = "gmtPHxEKgVOJS8U7SI3yfq6fcFkqfoLxuZmNf8rb";
-                    const lang = "Kor"; // 언어 코드 (Kor)
-                    const url = `https://naveropenapi.apigw.ntruss.com/recog/v1/stt?lang=${lang}`;
-
-
-                    const data = blob;
-
-                    const headers = {
-                        "X-NCP-APIGW-API-KEY-ID": client_id,
-                        "X-NCP-APIGW-API-KEY": client_secret,
-                        "Content-Type": "application/octet-stream",
-                    };
-
-                    fetch(url, {
-                        method: 'POST',
-                        headers: headers,
-                        body: data,
-                    })
-                        .then(response => {
-                            if (response.status === 200) {
-                                console.log(response.text());
-                                return response.text();
-                            } else {
-                                throw new Error('Error: ' + response.statusText);
-                            }
-                        })
-                        .then(responseText => {
-                            console.log(responseText);
-                        })
-                        .catch(error => {
-                            console.error(error);
-                        });
-                    audioArray.splice(0); // 기존 오디오 데이터들은 모두 비워 초기화한다.
-
-                    // Blob 데이터에 접근할 수 있는 주소를 생성한다.
-                    const blobURL = window.URL.createObjectURL(blob);
-
-                    //녹음재생
-                    $audioEl.src = blobURL;
-                    $audioEl.play();
-                }
-
-                // 녹음 시작
-                mediaRecorder.start();
-                isRecording = true;
-
-            } else {
-                // 녹음 종료
-                mediaRecorder.stop();
-                isRecording = false;
-                // 브라우저가 아닌 Node.js에서 실행하는 경우 필요한 라이브러리
-
-
-
-            }
-        }
-    </script>
-
-
 </body>
 
 </html>
