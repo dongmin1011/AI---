@@ -75,7 +75,7 @@
         }
 
         // 처음으로 받은 메시지를 호출
-        displayInitialMessage("GPT가 생성한 질문: " + {{user_question}} );
+        displayInitialMessage("Q: " + 'user_question' );
 
         sendButton.addEventListener("click", () => {
             // 사용자가 입력한 메시지 가져오기
@@ -95,7 +95,7 @@
             const messageDiv = document.createElement("div");
             messageDiv.className = "message";
             messageDiv.textContent = sender + ": " + message;
-            chatMessages.appendChild(messageDiv);
+            chatMessages.innerHTML += '<div class="message"></div>';//단순출력x
 
             // 새로운 메시지가 추가될 때 스크롤을 아래로 이동
             chatMessages.scrollTop = chatMessages.scrollHeight;

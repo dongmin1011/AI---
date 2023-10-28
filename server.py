@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from pdfminer.high_level import extract_text
 import openai
 
-api_key = "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"
+api_key = "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"
 openai.api_key = api_key
 
 prompt = """너는 지금부터 면접관이고, 사용자를 면접보는 역할이야
@@ -11,6 +11,7 @@ prompt = """너는 지금부터 면접관이고, 사용자를 면접보는 역�
 첫 질문은 사용자의 이력서를 보고 질문할 내용을 선택한다
 다음에 질문할 내용을 선택하고 사용자에게 딱 한가지 질문하세요
 안녕하세요로 시작
+특수문자를 빼고 결과를 출력해줘
 """
 
 app = Flask(__name__)
@@ -65,7 +66,7 @@ def gpt():
         
 
     print("GPT가 생성한 질문:", text)
-    
+    text.replace("!",'')
     return render_template('gpt.html', user_question=text)
 
 if __name__ == '__main__':
