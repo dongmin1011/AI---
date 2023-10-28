@@ -1,4 +1,4 @@
-{% comment %} <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -74,10 +74,11 @@
             messageDiv.className = "message";
             messageDiv.textContent = initialMessage;
             chatMessages.appendChild(messageDiv);
+            
         }
-
+        const initialMessage = `GPT가 생성한 질문: ${userQuestion}`;
         // 처음으로 받은 메시지를 호출
-        displayInitialMessage("GPT가 생성한 질문: {{ user_question }}");
+        displayInitialMessage(initialMessage);
 
         sendButton.addEventListener("click", () => {
             // 사용자가 입력한 메시지 가져오기
@@ -108,109 +109,4 @@
 
 
 
- {% endcomment %}
- <!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OpenAI를 이용한 챗봇</title>
-    
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .message {
-            border-top: 1px solid #ccc;
-            padding: 10px;
-            margin-top: 5px;
-            background-color: #e6e6e6;
-        }
-        #chat-container {
-            width: 400px;
-            height: 600px;
-            display: flex;
-            flex-direction: column;
-            border: 1px solid #ccc;
-        }
-        #chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 10px;
-            display: flex;
-            flex-direction: column-reverse;
-        }
-        #user-input {
-            display: flex;
-            padding: 10px;
-        }
-        #user-input input {
-            flex: 1;
-            padding: 10px;
-            outline: none;
-        }
-        #user-input button {
-            border: none;
-            background-color: #1e88e5;
-            color: white;
-            padding: 10px 15px;
-            cursor: pointer;
-        }
-    </style>
-</head>
-<body>
-    <div id="chat-container">
-        <div id="chat-messages"></div>
-        <div id="user-input">
-            <input type="text" placeholder="메시지를 입력하세요..." id="message-input" />
-            <button id="send-button">전송</button>
-        </div>
-    </div>
-
-    <script>
-        const chatMessages = document.getElementById("chat-messages");
-        const messageInput = document.getElementById("message-input");
-        const sendButton = document.getElementById("send-button");
-
-        // 처음으로 받은 메시지를 출력하는 함수
-        function displayInitialMessage(initialMessage) {
-            const messageDiv = document.createElement("div");
-            messageDiv.className = "message";
-            messageDiv.textContent = initialMessage;
-            chatMessages.appendChild(messageDiv);
-        }
-
-        // 처음으로 받은 메시지를 호출
-        displayInitialMessage("GPT가 생성한 질문: {{ user_question }}");
-
-        sendButton.addEventListener("click", () => {
-            // 사용자가 입력한 메시지 가져오기
-            const userMessage = messageInput.value;
-
-            // 사용자 메시지를 채팅창에 표시
-            displayMessage("user", userMessage);
-
-            // 서버로 메시지를 전송하고 챗봇으로부터 응답을 받는 부분은
-            // 서버 측에서 처리해야 합니다. 이 부분은 서버와의 통신을 다루게 됩니다.
-
-            // 메시지 입력란 비우기
-            messageInput.value = "";
-        });
-
-        // 메시지를 채팅창에 출력하는 함수
-        function displayMessage(sender, message) {
-            const messageDiv = document.createElement("div");
-            messageDiv.className = "message";
-            messageDiv.textContent = sender + ": " + message;
-            chatMessages.appendChild(messageDiv);
-
-            // 새로운 메시지가 추가될 때 스크롤을 아래로 이동
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-    </script>
-</body>
-</html>
+ 

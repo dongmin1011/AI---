@@ -3,11 +3,11 @@ from flask import Flask, render_template, request, redirect, url_for
 from pdfminer.high_level import extract_text
 import openai
 
-api_key = "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"
+api_key = "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"
 openai.api_key = api_key
 
 prompt = """너는 지금부터 면접관이고, 사용자를 면접보는 역할이야
-사용자에게 질문을 해야해
+면접자에게 질문을 해야해
 첫 질문은 사용자의 이력서를 보고 질문할 내용을 선택한다
 다음에 질문할 내용을 선택하고 사용자에게 딱 한가지 질문하세요
 안녕하세요로 시작
@@ -58,7 +58,7 @@ def gpt():
         temperature=0.5,
         max_tokens=300  # 생성된 응답의 최대 길이를 조절할 수 있습니다.
     )
-
+    
     user_question = response.choices[0].message["content"].strip()
     text = user_question.split("?")[0]
     
