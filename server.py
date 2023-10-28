@@ -4,8 +4,14 @@ from pdfminer.high_level import extract_text
 import openai
 import pyaudio
 import wave
+<<<<<<< HEAD
 
 api_key = "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"
+=======
+import sys
+import requests as rq
+api_key = "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"
+>>>>>>> 914cdc2dc4b1a970b39a098181bd388986bca89c
 openai.api_key = api_key
 
 prompt = """너는 지금부터 면접관이고, 사용자를 면접보는 역할이야
@@ -113,7 +119,29 @@ def record():
         wf.writeframes(b''.join(frames))
 
     print(f"녹음된 오디오는 '{OUTPUT_FILENAME}'에 저장되었습니다.")
-    return "HI"
-
+    
+    text = stt()
+    print(text)
+    
+    return text
+def stt():
+    client_id = "n7zz4t1epm"
+    client_secret = "gmtPHxEKgVOJS8U7SI3yfq6fcFkqfoLxuZmNf8rb"
+    lang = "Kor" # 언어 코드 ( Kor )
+    url = "https://naveropenapi.apigw.ntruss.com/recog/v1/stt?lang=" + lang
+    data = open('recorded_audio.wav', 'rb')
+    headers = {
+        "X-NCP-APIGW-API-KEY-ID": client_id,
+        "X-NCP-APIGW-API-KEY": client_secret,
+        "Content-Type": "application/octet-stream"
+    }
+    response = rq.post(url,  data=data, headers=headers)
+    rescode = response.status_code
+    if(rescode == 200):
+        print (response.text)
+        return response.text
+    else:
+        print("Error : " + response.text)
+    
 if __name__ == '__main__':
     app.run(debug=True)
