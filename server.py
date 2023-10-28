@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from pdfminer.high_level import extract_text
 import openai
 
-api_key = "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"
+api_key = "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"
 openai.api_key = api_key
 
 prompt = """너는 지금부터 면접관이고, 사용자를 면접보는 역할이야
