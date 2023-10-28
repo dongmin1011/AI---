@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenAI를 이용한 챗봇</title>
+    
+<style>
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    .message {
+        border-top: 1px solid #ccc;
+        padding: 10px;
+        margin-top: 5px;
+        background-color: #e6e6e6;
+    }
+    #chat-container {
+        width: 400px;
+        height: 600px;
+        display: flex;
+        flex-direction: column;
+        border: 1px solid #ccc;
+    }
+    #chat-messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 10px;
+        display: flex;
+        flex-direction: column-reverse;
+    }
+    #user-input {
+        display: flex;
+        padding: 10px;
+
+    }
+    #user-input input {
+        flex: 1;
+        padding: 10px;
+        outline: none;
+    }
+    #user-input button {
+        border: none;
+        background-color: #1e88e5;
+        color: white;
+        padding: 10px 15px;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+    <div id="chat-container">
+        <div id="chat-messages"></div>
+        <div id="user-input">
+            <input type="text" placeholder="메시지를 입력하세요..." id="message-input" />
+            <button id="send-button">전송</button>
+        </div>
+    </div>
+
+    <script>
+        const chatMessages = document.getElementById("chat-messages");
+        const messageInput = document.getElementById("message-input");
+        const sendButton = document.getElementById("send-button");
+
+        // 처음으로 받은 메시지를 출력하는 함수
+        function displayInitialMessage(initialMessage) {
+            const messageDiv = document.createElement("div");
+            messageDiv.className = "message";
+            messageDiv.textContent = initialMessage;
+            chatMessages.appendChild(messageDiv);
+        }
+
+        // 처음으로 받은 메시지를 호출
+        displayInitialMessage("GPT가 생성한 질문: " + {{user_question}} );
+
+        sendButton.addEventListener("click", () => {
+            // 사용자가 입력한 메시지 가져오기
+            const userMessage = messageInput.value;
+
+            // 사용자 메시지를 채팅창에 표시
+            displayMessage("user", userMessage);
+
+            // 서버로 메시지를 전송하고 응답을 받는 부분은 서버 측에서 처리해야 합니다.
+
+            // 메시지 입력란 비우기
+            messageInput.value = "";
+        });
+
+        // 메시지를 채팅창에 출력하는 함수
+        function displayMessage(sender, message) {
+            const messageDiv = document.createElement("div");
+            messageDiv.className = "message";
+            messageDiv.textContent = sender + ": " + message;
+            chatMessages.appendChild(messageDiv);
+
+            // 새로운 메시지가 추가될 때 스크롤을 아래로 이동
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+    </script>
+    <!-- 녹음 -->
+    <script>
+
+        // 엘리먼트 취득
+        const $audioEl = document.querySelector("audio");
+        const $btn = document.querySelector("button");
+        
+        // 녹음중 상태 변수
+        let isRecording = false;
+        
+        // MediaRecorder 변수 생성
+        let mediaRecorder = null;
+        
+        // 녹음 데이터 저장 배열
+        const audioArray = [];
+        
+        // 질문 출력 후 녹음 시작을 지연시킬 시간 (밀리초)
+        const recordDelay = 5000; // 예: 5초 후 녹음 시작
+        
+        $btn.onclick = async function (event) {
+            if (!isRecording) {
+                // 녹음 시작을 지연시키기 위해 setTimeout 사용
+                setTimeout(async () => {
+                    // 마이크 mediaStream 생성: Promise를 반환하므로 async/await 사용
+                    const mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        
+                    // MediaRecorder 생성
+                    mediaRecorder = new MediaRecorder(mediaStream);
+        
+                    // 이벤트핸들러: 녹음 데이터 취득 처리
+                    mediaRecorder.ondataavailable = (event) => {
+                        audioArray.push(event.data); // 오디오 데이터가 취득될 때마다 배열에 담아둔다.
+                    }
+        
+                    // 이벤트핸들러: 녹음 종료 
+                    mediaRecorder.onstop = (event) => {
+        
+                        // 녹음이 종료되면, 배열에 담긴 오디오 데이터(Blob)들을 합친다: 코덱도 설정해준다.
+                        const blob = new Blob(audioArray, { "type": "audio/ogg codecs=opus" });
+                        audioArray.splice(0); // 기존 오디오 데이터들은 모두 비워 초기화한다.
+        
+                        // Blob 데이터에 접근할 수 있는 주소를 생성한다.
+                        const blobURL = window.URL.createObjectURL(blob);
+                    }
+        
+                    // 녹음 시작
+                    mediaRecorder.start();
+                    isRecording = true;
+                }, recordDelay);
+        
+            } else {
+                // 녹음 종료
+                mediaRecorder.stop();
+                isRecording = false;
+            }
+        }
+        
+        </script>
+</body>
+</html>
