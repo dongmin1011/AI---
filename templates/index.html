@@ -100,6 +100,20 @@
             // 파일이 선택되면 자동으로 폼을 제출
             document.getElementById("upload-form").submit();
         });
+
+        // 파일 입력 상자 변경 이벤트 리스너
+        document.getElementById("input-file").addEventListener("change", function() {
+            // 파일이 선택되면 자동으로 폼을 제출
+            document.getElementById("upload-form").submit();
+
+            // 업로딩 중 메시지를 표시
+            document.getElementById("header").textContent = "파일 업로드 중...";
+
+            // 업로딩 중 메시지 아래에 로딩 스피너 또는 메시지를 추가할 수 있습니다.
+            // 여기에서는 간단한 텍스트를 추가합니다.
+            var messagesDiv = document.getElementById("messages");
+            messagesDiv.innerHTML += '<div class="server-message">이력서를 분석 중입니다. 잠시 기다려주세요...</div>';
+        });
     </script>
 </body>
 
