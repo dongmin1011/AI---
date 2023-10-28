@@ -18,6 +18,7 @@
             padding: 10px;
             margin-top: 5px;
             background-color: #e6e6e6;
+            order: -1;
         }
         #chat-container {
             width: 400px;
@@ -32,6 +33,7 @@
             padding: 10px;
             display: flex;
             flex-direction: column-reverse;
+  flex-direction: column; 
         }
         #user-input {
             display: flex;
@@ -49,20 +51,25 @@
             padding: 10px 15px;
             cursor: pointer;
         }
+        
     </style>
 </head>
 <body>
     <div id="chat-container">
         <div id="chat-messages"></div>
         <div id="user-input">
-            <input type="text" placeholder="메시지를 입력하세요..." id="message-input" />
-            <button id="send-button">전송</button>
+            
+            <h5  id="record">
+                버튼을 눌러 질문에 대한 답을 하세요
+            </h5>
+        
+            <input id="target_btn" type="button" value="녹음"/>
         </div>
     </div>
     <script>
         const chatMessages = document.getElementById("chat-messages");
         const messageInput = document.getElementById("message-input");
-        const sendButton = document.getElementById("send-button");
+        const sendButton = document.getElementById("record-button");
 
         function displayInitialMessage(initialMessage) {
             const messageDiv = document.createElement("div");
@@ -86,7 +93,7 @@
             displayMessage("user", userMessage);
 
             // 서버로 메시지를 전송하고 응답을 받는 부분은 서버 측에서 처리해야 합니다.
-            
+
             // 메시지 입력란 비우기
             messageInput.value = "";
         });
