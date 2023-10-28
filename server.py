@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from pdfminer.high_level import extract_text
 import openai
 
-api_key = "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"
+api_key = "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"
 openai.api_key = api_key
 
 prompt = """너는 지금부터 면접관이고, 사용자를 면접보는 역할이야
@@ -65,7 +65,7 @@ def gpt():
         
 
     print("GPT가 생성한 질문:", text)
-    
+    text.replace('\n', '')
     return render_template('gpt.html', user_question=text)
 
 if __name__ == '__main__':
