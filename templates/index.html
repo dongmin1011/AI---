@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Chatbot Playground</title>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet" />
+    <style>
+        .chat-body {
+            width: 700px;
+            height: 500px;
+            
+            margin: 50px auto;
+            align-items: center;
+            align-items: center;
+        }
+
+        .card-body {
+            background-color: #333;
+            color: #fff;
+            border-radius: 10px;
+            
+        }
+
+        .server-message {
+            background-color: #444;
+            padding: 10px;
+            margin: 10px;
+            border-radius: 10px;
+        }
+
+        .client-message {
+            background-color: #555;
+            padding: 10px;
+            margin: 10px;
+            border-radius: 10px;
+        }
+
+        .form-inline {
+            display: flex;
+            justify-content: center; 
+        }
+
+        .form-control {
+            width: 80%;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            margin-right: 10px;
+        }
+
+        #send {
+            background-color: #4c4cff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+        }
+
+        .form-message {
+            margin-top: 10px;
+        }
+
+        .input-file-button {
+            padding: 6px 25px;
+            background-color: #FF6600;
+            border-radius: 4px;
+            color: rgb(255, 255, 255);
+            cursor: pointer;
+        }
+
+    </style>
+
+    <div class="chat-body card">
+        <div class="card-body p-5">
+            <h1 class="card-title text-center text-xl font-medium">
+                ChatGPT 면접 프로그램
+            </h1>
+            <h4 class="card-text text-center text-sm" id="header">
+                이력서를 업로드 해주세요
+            </h4>
+            <hr class="border-gray-500 mb-5" style="margin-top: 20px" />
+            <div id="messages" class="overflow-auto" style="max-height: 500px"></div>
+            <div class="form-inline">
+                <form action="/upload" method="post" enctype="multipart/form-data" id="upload-form">
+                    <label for="input-file" style="background-color: #FF6600; padding: 6px 25px; border-radius: 4px; color: #fff; cursor: pointer;">
+                        업로드
+                    </label>
+                    <input type="file" name="file" id="input-file" style="display: none;" />
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        // 파일 입력 상자 변경 이벤트 리스너
+        document.getElementById("input-file").addEventListener("change", function() {
+            // 파일이 선택되면 자동으로 폼을 제출
+            document.getElementById("upload-form").submit();
+        });
+    </script>
+</body>
+
+</html>
